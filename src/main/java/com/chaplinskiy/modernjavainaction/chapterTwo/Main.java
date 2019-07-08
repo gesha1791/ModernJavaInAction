@@ -3,6 +3,7 @@ package com.chaplinskiy.modernjavainaction.chapterTwo;
 import com.chaplinskiy.modernjavainaction.chapterTwo.service.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.chaplinskiy.modernjavainaction.chapterTwo.Color.GREEN;
@@ -12,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         List<Apple> apples = new ArrayList<>();
 
-        Apple apple = new Apple(GREEN, 100);
+        Apple apple = new Apple(GREEN, 199);
         Apple apple2 = new Apple(RED, 120);
         Apple apple3 = new Apple(GREEN, 187);
         Apple apple4 = new Apple(RED, 179);
@@ -33,6 +34,18 @@ public class Main {
         prettyPrintApple(apples, new AppleFancyFormatter());
 
         prettyPrintApple(apples, new AppleSimpleFormatter());
+
+        filterApples(apples, (Apple a) -> RED.equals(a.getColor()));
+
+        List<Integer> numbers = Arrays.asList(4, 6, 8);
+
+        List<Integer> filter = filter(numbers, (Integer i) -> i % 2 == 0);
+        filter.forEach(System.out::println);
+
+
+        apples.sort((Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()));
+        apples.forEach(System.out::println);
+
     }
 
     private static List<Apple> filterGreenApples(List<Apple> inventory, Color color) {
@@ -95,6 +108,15 @@ public class Main {
             String output = formatter.accept(apple);
             System.out.println(output);
         }
+    }
+
+    public static <T> List<T> filter(List<T> list, Predicate<T> p) {
+        List<T> result = new ArrayList<>();
+        for(T e: list) {
+            if(p.test(e)) {
+                result.add(e);
+            } }
+        return result;
     }
 
 

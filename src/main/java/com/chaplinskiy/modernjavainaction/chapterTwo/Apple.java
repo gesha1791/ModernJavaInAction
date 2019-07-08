@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class Apple {
     private Enum color;
-    private int weight;
+    private Integer weight;
 }
