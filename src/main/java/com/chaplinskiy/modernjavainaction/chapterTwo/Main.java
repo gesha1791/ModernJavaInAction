@@ -46,6 +46,7 @@ public class Main {
         apples.sort((Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight()));
         apples.forEach(System.out::println);
 
+
     }
 
     private static List<Apple> filterGreenApples(List<Apple> inventory, Color color) {
