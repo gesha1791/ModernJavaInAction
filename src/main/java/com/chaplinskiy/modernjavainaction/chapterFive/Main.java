@@ -4,7 +4,9 @@ import com.chaplinskiy.modernjavainaction.chapterFour.Dish;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.chaplinskiy.modernjavainaction.chapterFour.Type.*;
 import static com.chaplinskiy.modernjavainaction.chapterFour.Type.FISH;
@@ -45,6 +47,7 @@ public class Main {
                 new Dish("prawns", false, 300, FISH),
                 new Dish("rice", true, 350, OTHER),
                 new Dish("chicken", false, 400, MEAT),
+                new Dish("chickenYoung", false, 423, MEAT),
                 new Dish("goose", true, 280, OTHER),
                 new Dish("french fries", true, 530, OTHER));
 
@@ -82,5 +85,139 @@ public class Main {
                 .collect(toList());
         System.out.println("skip 2 elements > 300");
         dishes.forEach(System.out::println);
+
+        List<String> map = specialMenu.stream()
+                .map(Dish::getName)
+                .collect(toList());
+        map.forEach(System.out::println);
+
+        List<String> words = Arrays.asList("Modern", "Java", "In", "Action");
+
+        List<Integer> lenghtWords = words.stream()
+                .map(String::length)
+                .collect(toList());
+
+        List<Integer> collect1 = specialMenu.stream()
+                .map(Dish::getName)
+                .map(String::length)
+                .collect(toList());
+
+        collect1.forEach(System.out::println);
+
+        List<String> strings = Arrays.asList("Hello", "world");
+
+
+        // Incorrect use of map to find unique characters from a list of words
+        List<String[]> collect2 = strings.stream()
+                .map(word -> word.split(""))
+                .distinct()
+                .collect(toList());
+
+        String [] arrayOfWords = {"Goodbye", "World"};
+        Stream<String> streamOfWords = Arrays.stream(arrayOfWords);
+
+        List<Stream<String>> collect3 = strings.stream()
+                .map(word -> word.split(""))
+                .map(Arrays::stream)
+                .distinct()
+                .collect(toList());
+
+        List<String> flatMapStringWords = strings.stream()
+                .map(word -> word.split(""))
+                .flatMap(Arrays::stream)
+                .distinct()
+                .collect(toList());
+
+        List <Integer> integers = Arrays.asList(1, 2, 3, 4, 5);
+
+        integers.stream()
+                .map(num -> num * num)
+                .collect(toList());
+
+        List<Integer> numbers1 = Arrays.asList(1, 2, 3);
+        List<Integer> numbers2 = Arrays.asList(3, 4);
+
+        List<int[]> collect4 = numbers1.stream()
+                .flatMap(i -> numbers2.stream()
+                        .map(j -> new int[]{i, j})
+                )
+                .collect(toList());
+
+
+        List<int[]> collect5 = numbers1.stream()
+                .flatMap(i ->
+                        numbers2.stream()
+                                .filter(j -> (i + j) % 3 == 0)
+                                .map(j -> new int[]{i, j})
+                )
+                .collect(toList());
+
+
+
+        // The anyMatch method returns a boolean and is therefore a terminal operation.
+        if (menu.stream().anyMatch(Dish::isVegetarian)){
+            System.out.println("The menu is (somewhat) vegetarian friendly");
+        }
+
+        // The allMatch method works similarly to anyMatch but will check to see if all the elements
+        // of the stream match the given predicate. The allMatch method works similarly to anyMatch
+        // but will check to see if all the elements of the stream match the given predicate.
+        boolean isHealthy = menu.stream().allMatch(dish -> dish.getCalories() < 1000);
+
+
+        boolean b = menu.stream().noneMatch(d -> d.getCalories() >= 1000);
+
+
+        Optional<Dish> dishVegetarian = menu.stream()
+                .filter(Dish::isVegetarian)
+                .findAny();
+
+        menu.stream()
+                .filter(Dish :: isVegetarian)
+                .findAny()
+                .ifPresent(dish -> System.out.println(dish.getName()));
+
+
+        List<Integer> someNumbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        someNumbers.stream()
+                .map(n -> n * n)
+                .filter(n -> n % 3 == 0)
+                .findFirst()
+                .ifPresent(n -> System.out.println(n));
+
+
+        // Summing the elements, loop
+        int sum = 0;
+        for (int x : someNumbers) {
+            sum += x;
+        }
+
+        // reduce
+        Integer reduce = someNumbers.stream().reduce(0, (a, c) -> a + c);
+        System.out.println(reduce);
+
+        Integer reduce2 = someNumbers.stream().reduce(0, Integer::sum);
+
+        Integer reduce1 = numbers.stream().reduce(1, (a, c) -> a * c);
+        System.out.println(reduce1);
+
+        // The reduce operation can’t return a sum because it doesn’t have an initial value
+        Optional<Integer> reduce3 = numbers.stream().reduce((z, x) -> (z + x));
+
+
+        Optional<Integer> maxInteger = someNumbers.stream().reduce(Integer::max);
+
+        Optional<Integer> minInteger = someNumbers.stream().reduce(Integer::min);
+
+        Integer reduce4 = menu.stream()
+                .map(d -> 1)
+                .reduce(0, (a, c) -> a + c);
+
+        long count = menu.stream().count();
+
+        System.out.println(reduce4 + " " + count);
+
     }
+
 }
